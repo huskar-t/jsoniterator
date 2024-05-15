@@ -37,6 +37,12 @@ func (iter *Iterator) SkipAndReturnBytes() []byte {
 	return iter.stopCapture()
 }
 
+func (iter *Iterator) SkipAndReturnBytesRef() []byte {
+	iter.startCapture(iter.head)
+	iter.Skip()
+	return iter.stopCaptureReturnRef()
+}
+
 // SkipAndAppendBytes skips next JSON element and appends its content to
 // buffer, returning the result.
 func (iter *Iterator) SkipAndAppendBytes(buf []byte) []byte {
@@ -66,6 +72,16 @@ func (iter *Iterator) stopCapture() []byte {
 	iter.captureStartedAt = -1
 	iter.captured = nil
 	return append(captured, remaining...)
+}
+
+func (iter *Iterator) stopCaptureReturnRef() []byte {
+	if iter.captured == nil {
+		panic("not in capture mode")
+	}
+	remaining := iter.buf[iter.captureStartedAt:iter.head]
+	iter.captureStartedAt = -1
+	iter.captured = nil
+	return remaining
 }
 
 // Skip skips a json object and positions to relatively the next json object
