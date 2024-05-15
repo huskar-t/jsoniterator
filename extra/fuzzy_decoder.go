@@ -8,7 +8,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/json-iterator/go"
+	"github.com/huskar-t/jsoniterator"
 	"github.com/modern-go/reflect2"
 )
 
